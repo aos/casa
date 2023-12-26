@@ -1,0 +1,48 @@
+---
+- hosts: localhost
+  vars:
+    netw: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          61366630643431646432366166663534353232353037653131343463646434346639323838373562
+          6136346665643035666265636366613966343164336665380a633836303537303465626331306562
+          66663461646562633631623535346530633439333764393238363831653965373036393361363030
+          6135366536313937640a383239363066626231333334363039323163393239363138383432353861
+          6633
+    netwp: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          62373463663635346164353865303137316132613136313565346664356535653161393031313262
+          3238386235353761613737643837616235633861383362300a313964616239633863326162366132
+          66363365356333313739353864363637366263663732363461313637666361653139393761643366
+          3266663463316366610a373835313165373535306235353666643338326337303337616431643539
+          3833
+    smart_plug_wifi_regex: 'TP-LINK_Smart Plug.*' 
+  
+  tasks:
+    - name: Find smart plug open wifi network
+      ansible.builtin.shell:
+        cmd: "nmcli dev wifi list  | grep -e '{{ smart_plug_wifi_regex }}' | awk '{ print $2 }'"
+      register: smartplug_bssid
+
+    - debug: var=smartplug_bssid
+
+    - name: Connect to smart plug network
+      ansible.builtin.command:
+        cmd: "nmcli dev wifi connect {{ smartplug_bssid.stdout }}"
+
+    - name: Scan for networks
+      ansible.builtin.command:
+        cmd: >
+          kasa --host 192.168.0.1 wifi scan
+      register: smartplug_scan_output
+
+    - name: "Join {{ netw }}"
+      ansible.builtin.command:
+        cmd: >
+          kasa
+          --host 192.168.0.1 wifi join {{ netw }}
+          --password {{ netwp }}
+      when: our_network in smartplug_scan_output.stdout
+
+    - name: Connect back to our network
+      ansible.builtin.command:
+        cmd: "nmcli dev wifi connect {{ netwp }}"

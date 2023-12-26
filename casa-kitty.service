@@ -1,0 +1,14 @@
+[Unit]
+Description=Kitty autofeeder
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/home/ansible/casa
+Environment=PORT=80
+ExecStart=python3 /home/ansible/casa/casa/__init__.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

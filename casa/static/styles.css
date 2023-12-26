@@ -1,0 +1,34 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: "Helvetic Neue", serif;
+}
+
+#container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#box {
+  padding-top: 2em;
+  text-align: center;
+}
+
+#text-box {
+  text-align: right;
+}
+
+.off {
+}
+
+.on {
+  box-shadow: 2px 2px 8px rgba(0, 0, 0);
+}
+
+.small-text {
+  font-size: 0.5em;
+}

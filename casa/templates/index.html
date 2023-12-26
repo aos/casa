@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+  <div id="container">
+    <div id="box">
+    {% if devices %}
+      {% for k, v in devices.items() %}
+        {% if v['device'].is_off %}
+          <form action="/toggle" method="POST"
+                onsubmit="this.disabled=true; return true;">
+            <input type="hidden" name="device" value="{{ k | e }}">
+            <input type="hidden" name="wait_time" value="5" min="1" max="20">
+            <input type="image" name="submit"
+                   src="{{ url_for('static', path='/red_mochi_medium.png') }}"
+                   border="0"
+                   alt="Submit"
+            />
+          </form>
+        {% else %}
+          <img src="{{ url_for('static', path='/green_mochi_medium.png') }}" />
+        {% endif %}
+
+        <div id="text-box">
+          <h3 style="letter-spacing: 3px;">{{ k | lower }}</h3>
+          <p class="small-text">{{ v['last_run'] or 'Never' }}</p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <form action="/update" method="POST"
+            onsubmit="this.disabled=true; return true;">
+          <input type="image" name="submit"
+                 src="{{ url_for('static', path='/red_mochi_medium.png') }}"
+                 border="0"
+                 alt="Submit"
+          />
+      </form>
+      <div id="text-box">
+        <h3 style="letter-spacing: 3px;">{{ k | lower }}</h3>
+        <p class="small-text">Refresh</p>
+      </div>
+    {% endif %}
+    </div>
+  </div>
+</main>
+{% endblock %}
