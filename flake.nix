@@ -22,6 +22,17 @@
             projectDir = ./.;
             preferWheels = true;
           };
+          docker = let
+            app = self.packages.${system}.default;
+          in pkgs.dockerTools.buildLayeredImage {
+            name = "aos/${app.pname}";
+            tag = "latest";
+            contents = [ app ];
+
+            config = {
+              Cmd = [ "${app}/bin/casa" ];
+            };
+          };
         };
 
         devShell = poetry-env.env.overrideAttrs (old: {
