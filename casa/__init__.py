@@ -5,7 +5,7 @@ import os
 from starlette.applications import Starlette
 import uvicorn
 
-import routes
+from . import routes
 
 
 logger = logging.getLogger(__name__)
@@ -16,7 +16,7 @@ logging.basicConfig(
 SCHEDULE_FN = "./devices.yaml"
 
 
-if __name__ == "__main__":
+def main():
     debug = os.environ.get("DEBUG", True)
 
     try:
@@ -26,3 +26,7 @@ if __name__ == "__main__":
 
     app = Starlette(debug=debug, routes=routes.routes, lifespan=routes.lifespan)
     uvicorn.run(app, host="0.0.0.0", port=port)
+
+
+if __name__ == "__main__":
+    main()

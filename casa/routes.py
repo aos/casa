@@ -8,7 +8,7 @@ try:
 except ModuleNotFoundError:
     from backports.zoneinfo import ZoneInfo  # ignore
 
-import smartplug
+from . import smartplug
 
 from starlette.requests import Request
 from starlette.responses import RedirectResponse, Response

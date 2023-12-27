@@ -8,7 +8,7 @@ from kasa.exceptions import SmartDeviceException
 
 import yaml
 
-import utils
+from . import utils
 
 LAST_RUNS_DIR = "./last_runs"
 

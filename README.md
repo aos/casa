@@ -2,8 +2,8 @@
 
 Kitty autofeeder scheduler + status
 
-### Developing
+### Development
 
 1. Dev environment: `nix develop`
-2. Run via `python3 casa/__init__.py` after dropping into dev environment (for
-   some reason `nix run` doesn't work)
+2. Run locally: `nix run`
+3. Build: `nix build`
