@@ -9,7 +9,7 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs { inherit system; };
         poetry-env = pkgs.poetry2nix.mkPoetryEnv {
           projectDir = ./.;
           editablePackageSources.casa = ./casa;
@@ -33,11 +33,13 @@
               Cmd = [ "${app}/bin/casa" ];
             };
           };
+          provision = pkgs.writeShellScriptBin "provision-plug" ''
+            "${pkgs.ansible}/bin/ansible-playbook" --ask-vault-pass ./provision.yml
+          '';
         };
 
         devShell = poetry-env.env.overrideAttrs (old: {
           nativeBuildInputs = with pkgs; old.nativeBuildInputs ++ [
-            pkgs.ansible
             pkgs.python3Packages.poetry
             pkgs.python3Packages.flake8
           ];

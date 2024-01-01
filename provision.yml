@@ -22,6 +22,7 @@
       ansible.builtin.shell:
         cmd: "nmcli dev wifi list  | grep -e '{{ smart_plug_wifi_regex }}' | awk '{ print $2 }'"
       register: smartplug_bssid
+      changed_when: False
 
     - debug: var=smartplug_bssid
 
