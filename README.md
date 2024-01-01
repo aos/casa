@@ -8,6 +8,12 @@ Kitty autofeeder scheduler + status
 2. Run locally: `nix run`
 3. Build: `nix build`
 
+### Smart plug
+
+1. Smart plug can be provisioned using: `nix build .#provision`
+2. Requires ansible-vault playbook pass
+3. TODO: Just move it all away from ansible
+
 ### Docker image
 
 1. Build with `nix build .#docker`
